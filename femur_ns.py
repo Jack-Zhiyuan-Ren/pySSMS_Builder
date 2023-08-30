@@ -212,7 +212,7 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
     # #     for k in range(wrapCnt):
     # #         print(k)
 
-
+    plt.show()
     for u in range(wrapCnt):
         if u < 5:
             currLoc = wrapLocations_NewAxis[u, :]

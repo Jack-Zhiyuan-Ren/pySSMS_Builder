@@ -11,7 +11,7 @@ from Make_PEmodel import make_PEmodel_FemurOnly
 pathstr = Path.cwd()
 os.chdir(pathstr)
 
-folder = '/Users/Jack/OneDrive - University of Illinois - Urbana/Ren_Femur_Twist_Python/DEFORMED_MODEL'
+folder = 'C:/Users/jackr/OneDrive/Documents/GitHub/Ren_Femur_Twist_Python-copy/DEFROMED_MODEL'
 #deleteing the files that was in folder
 for filename in os.listdir(folder):
     file_path = os.path.join(folder, filename)
