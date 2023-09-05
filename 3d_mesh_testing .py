@@ -3,7 +3,8 @@ from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt 
 import numpy as np 
 import pandas as pd
- 
+import csv
+
  
 # Creating radii and angles
 r = np.linspace(0.125, 1.0, 100) 
@@ -15,9 +16,13 @@ a = np.linspace(0, 2 * np.pi,
 a = np.repeat(a[..., np.newaxis], 100, axis = 1) 
 
 
-data = pd.read_csv("femur_NewAxis.csv")
-print(data)
-# Creating dataset
+file = open("femur_NewAxis.csv", "r")
+data = list(csv.reader(file, delimiter=","))
+file.close()
+print(data[0])
+
+
+
 x = np.append(0, (r * np.cos(a))) 
 y = np.append(0, (r * np.sin(a)))   
 z = (np.sin(x ** 4) + np.cos(y ** 4))

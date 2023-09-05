@@ -206,7 +206,7 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
     # np.savetxt("femur_NewAxis.csv",
     #     femur_NewAxis,
     #     delimiter =" ",
-    #     fmt ='% f')
+    #     fmt =' {:f}')
     #ax.plot_trisurf(femur_rot1_all[:, 0], femur_rot1_all[:, 1], femur_rot1_all[:, 2], edgecolor='black', linestyle=':')
     ax.plot_trisurf(femur_NewAxis[:, 0], femur_NewAxis[:, 1], femur_NewAxis[:, 2],antialiased = True, edgecolor='black')
     ax.set_xlabel('x')
