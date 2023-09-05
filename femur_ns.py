@@ -1,4 +1,5 @@
 import numpy as np
+from mpl_toolkits.mplot3d import Axes3D #for 3d graphing
 from Femur_MA import femur_MA
 from OpenSimMarkers import OpenSimMarkers
 from coordinatesCorrection import coordinatesCorrection
@@ -112,7 +113,8 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
         else:
             femur_rot1_all.append(femur_NewAxis[i, :])
             
-    
+    # print('femur_NewAxis')
+    # print(femur_NewAxis)
     femur_rot1_all_2 = femur_rot1_all  
     #print(femur_rot1_all_2)
     femur_rot1_all = np.array(femur_rot1_all)
@@ -196,10 +198,17 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
     fig = plt.figure(figsize=(10, 10))
     # ax = fig.add_subplot(111, projection='3d')    #original
     ax = fig.add_subplot(111, projection='3d')
-    # ax = plt.axes(projection='3d')
+    #ax = plt.axes(projection='3d')
     # triangles=Delaunay(femur_rot1_all[:,:2]).simplices
-    ax.scatter(femur_rot1_all[:, 0], femur_rot1_all[:, 1], femur_rot1_all[:, 2], edgecolor='black', linestyle=':')
-    ax.scatter(femur_NewAxis[:, 0], femur_NewAxis[:, 1], femur_NewAxis[:, 2], edgecolor='black')
+    ## plot_trisurf or original
+    print("femur_NewAxis[:, 1]")
+    print(femur_NewAxis[:, 1])
+    # np.savetxt("femur_NewAxis.csv",
+    #     femur_NewAxis,
+    #     delimiter =" ",
+    #     fmt ='% f')
+    #ax.plot_trisurf(femur_rot1_all[:, 0], femur_rot1_all[:, 1], femur_rot1_all[:, 2], edgecolor='black', linestyle=':')
+    ax.plot_trisurf(femur_NewAxis[:, 0], femur_NewAxis[:, 1], femur_NewAxis[:, 2],antialiased = True, edgecolor='black')
     ax.set_xlabel('x')
     ax.set_ylabel('y')
     ax.set_zlabel('z')
@@ -311,10 +320,14 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
         else:
             femurMarker_rot2_all[i, :] = femurMarker_rot1_all[i, :]
     
+    print("femur_rot2_all")
+    print(femur_rot2_all)
+
+    #ax.plot_trisurf(femur_rot1_all[:, 0], femur_rot1_all[:, 1], femur_rot1_all[:, 2], edgecolor='black', linestyle=':')
     fig = plt.figure(figsize=(10, 20))
     ax1 = fig.add_subplot(211, projection='3d')
-    ax1.plot_trisurf(polys, femur_rot2_all[:, 0], femur_rot2_all[:, 1], femur_rot2_all[:, 2], color='none', edgecolor='black', linestyle=':')
-    ax1.plot_trisurf(polys, femur_NewAxis[:, 0], femur_NewAxis[:, 1], femur_NewAxis[:, 2], color='none', edgecolor='black')
+    ax1.scatter(femur_rot2_all[:, 0], femur_rot2_all[:, 1], femur_rot2_all[:, 2], color='none', edgecolor='black', linestyle=':')
+    ax1.scatter(femur_NewAxis[:, 0], femur_NewAxis[:, 1], femur_NewAxis[:, 2], color='none', edgecolor='black')
     ax1.set_box_aspect([1, 1, 1])
     ax1.view_init(30, -10)
     ax1.grid(True)
@@ -325,29 +338,35 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
     ax1.set_yticklabels([])
     ax1.set_zticklabels([])
     
+    
+
     ax2 = fig.add_axes([0.65, 0.25, 0.35, 0.55], projection='3d')
-    ax2.plot_trisurf(polys_middle, femur_rot2_all[:, 0], femur_rot2_all[:, 1], femur_rot2_all[:, 2], color='none', edgecolor='black', linestyle=':')
-    ax2.plot_trisurf(polys_middle, femur_NewAxis[:, 0], femur_NewAxis[:, 1], femur_NewAxis[:, 2], color='none', edgecolor='black')
-    ax2.plot_trisurf(polys_inner, femur_rot2_all[:, 0], femur_rot2_all[:, 1], femur_rot2_all[:, 2], color='none', edgecolor='black', linestyle=':')
-    ax2.plot_trisurf(polys_inner, femur_NewAxis[:, 0], femur_NewAxis[:, 1], femur_NewAxis[:, 2], color='none', edgecolor='black')
+    ax2.scatter(femur_rot2_all[:, 0], femur_rot2_all[:, 1], femur_rot2_all[:, 2], color='none', edgecolor='black', linestyle=':')
+    ax2.scatter(femur_NewAxis[:, 0], femur_NewAxis[:, 1], femur_NewAxis[:, 2], color='none', edgecolor='black')
+    ax2.scatter(femur_rot2_all[:, 0], femur_rot2_all[:, 1], femur_rot2_all[:, 2], color='none', edgecolor='black', linestyle=':')
+    ax2.scatter(femur_NewAxis[:, 0], femur_NewAxis[:, 1], femur_NewAxis[:, 2], color='none', edgecolor='black')
     ax2.set_box_aspect([1, 1, 1])
     ax2.view_init(30, -10)
     ax2.set_xticklabels([])
     ax2.set_yticklabels([])
     ax2.set_zticklabels([])
+
+    plt.show()
     
     maxZ = np.max(middleBox[:, 2])
     minZ = np.min(middleBox[:, 2])
     for u in range(wrapCnt):
-        currLoc = wrapLocations_NewAxis[u, :]
-        if minZ < currLoc[2] < maxZ:
-            i = wrapIndizes[u, 0]
-            j = wrapIndizes[u, 1]
-            k = wrapIndizes[u, 2]
-            name = dataModel.OpenSimDocument.Model.BodySet.objects.Body[0, i].WrapObjectSet.objects[wrapObjectTypes[j]][0, k].Attributes.name
-            print(f'WrapObject "{name}" is in the area where the femur itself is rotated! This is not supported yet, adjust the location manually!')
+        if u < 5:
+            currLoc = wrapLocations_NewAxis[u, :]
+            if minZ < currLoc[2] < maxZ:
+                i = wrapIndizes[u, 0]
+                j = wrapIndizes[u, 1]
+                k = wrapIndizes[u, 2]
+                name = dataModel.OpenSimDocument.Model.BodySet.objects.Body[0, i].WrapObjectSet.objects[wrapObjectTypes[j]][0, k].Attributes.name
+                print(f'WrapObject "{name}" is in the area where the femur itself is rotated! This is not supported yet, adjust the location manually!')
             
-            
+    
+
     # Rotation; Step 3
     # %MOVE THE FEMORAL HEAD BACK TO FIT CONDYLAR WITHOUT MOVING THE CONDYLAR
     # %start by transfering the bone back to the H_ZX
@@ -413,35 +432,49 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
     femurMarker_rot3_all = np.zeros_like(femurMarker_rot2_all)
     femurMarker_rot3_all_deform = np.zeros_like(femurMarker_rot2_all)
 
+    # print("CondylMarker_NewAxis")
+    # print(CondylMarker_NewAxis)
+
     for i in range(femurMarker_rot2_all.shape[0]):
         if np.any(np.all(femurMarker_rot2_all[i, :] == CondylMarker_NewAxis, axis=1)):  # the condylar do not move
             femurMarker_rot3_all[i, :] = femurMarker_rot2_all[i, :]
         else:
             item_rot3 = femurMarker_rot2_all[i, :] + transfer_step3  # The inner and middle box are transferred back to the position of the femoral head
             femurMarker_rot3_all[i, :] = item_rot3
+        ## ShaftMarker_distal is empty on Matlab as well
+        #past version: np.any(np.all(femurMarker_rot2_all[i, :] == ShaftMarker_distal, axis=1))
 
-        if np.any(np.all(femurMarker_rot2_all[i, :] == ShaftMarker_distal, axis=1)):
-            scaler = (np.linalg.norm(femurMarker_rot3_all[i, :] - condyl_top) - distance_shaft_distal) / distance_shaft_distal * transfer_step3
-            item_rot3_distal = femurMarker_rot3_all[i, :] + scaler
-            femurMarker_rot3_all_deform[i, :] = item_rot3_distal
-        else:
-            femurMarker_rot3_all_deform[i, :] = femurMarker_rot3_all[i, :]
+        ## commented out because ShaftMarkerDistal never printed anything in Matlab
+        # if ShaftMarker_distal.issubset(femurMarker_rot2_all[i, :]):
+        #     scaler = (np.linalg.norm(femurMarker_rot3_all[i, :] - condyl_top) - distance_shaft_distal) / distance_shaft_distal * transfer_step3
+        #     item_rot3_distal = femurMarker_rot3_all[i, :] + scaler
+        #     femurMarker_rot3_all_deform[i, :] = item_rot3_distal
+        # else:
+        #     femurMarker_rot3_all_deform[i, :] = femurMarker_rot3_all[i, :]
             
             
-    maxShaft_prox = np.max(Shaft_proximal[:, 2])
+    maxShaft_prox = np.max(Shaft_proximal[:][2])
+
+    # print("wrapLocations_NewAxis")
+    # print(wrapLocations_NewAxis)
+    # print("wrapCnt")
+    # print(wrapCnt)
+    #wrapCnt is 48 but there are only 6 wrapLcoations_NewAxis
 
     for i in range(wrapCnt):
-        currLoc = wrapLocations_NewAxis[i, :]
-        wrapRotations_New[i, :] = wrapRotations_New[i, :]
+        currLoc = wrapLocations_NewAxis[i]
+        # print("wrapRotations_New[i]")
+        # print(wrapRotations_New[i])
+        wrapRotations_New[i] = wrapRotations_New[i]
 
         if currLoc[2] < maxCondyl:  # it is at the condyles, don't do any rotation
-            wrapLocations_New[i, :] = wrapLocations_New[i, :]
+            wrapLocations_New[i] = wrapLocations_New[i]
         else:
-            wrapLocations_New[i, :] = wrapLocations_New[i, :] + coordinatesOpenSim(transfer_step3)
+            wrapLocations_New[i] = wrapLocations_New[i] + coordinatesOpenSim(transfer_step3)
 
         if currLoc[2] < maxShaft_prox and currLoc[2] > minShaft_prox:
-            scaler = (np.abs(np.linalg.norm(wrapLocations_New[i, :] - condyl_top)) - distance_shaft_distal) / distance_shaft_distal * transfer_step3
-            wrapLocations_New[i, :] = wrapLocations_New[i, :] + coordinatesOpenSim(scaler)
+            scaler = (np.abs(np.linalg.norm(wrapLocations_New[i] - condyl_top)) - distance_shaft_distal) / distance_shaft_distal * transfer_step3
+            wrapLocations_New[i] = wrapLocations_New[i] + coordinatesOpenSim(scaler)
             
             
     for u in range(wrapCnt):

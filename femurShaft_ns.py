@@ -232,19 +232,24 @@ def femurShaft_ns(dataModel, femur_start, answerLeg, rightbone, femurMuscle_star
     innerBoxMarker = HeadNeckMarkers
     middleBox = np.concatenate((LesserTroc, ShaftProx), axis=0)  # the lesser SEL_point and proximal part of the femur
     middleBoxMA = np.concatenate((LesserTrocMA, ShaftProxMA), axis=0)
-    print('LesserTrocMarkers')
-    print(LesserTrocMarkers)
-    print('ShaftProxMA')
-    print(ShaftProxMA)
+    # print('LesserTrocMarkers')
+    # print(LesserTrocMarkers)
+    # print('ShaftProxMA')
+    # print(ShaftProxMA)
     middleBoxMarker = np.concatenate((LesserTrocMA, ShaftProxMA), axis=0) ## Why middle Box MA is the same as middleBoxMarker
     outerBox = np.concatenate((HeadNeck, LesserTroc, Shaft), axis=0)  # everything except for the condylar
     outerBox_less = np.concatenate((ShaftDist, Condylar), axis=0)  # everything apart from inner and middle box
     
-    print('middleboxmarker')
-    print(middleBoxMarker)
+    # print('middleboxmarker')
+    # print(middleBoxMarker)
+
+    # print("wrapLocation_NewAxis femurshaft_ns")
+    # print(wrapLocationsRot)
     # print(innerBox, middleBox, innerBoxMA, innerBoxMarker, middleBoxMA, middleBoxMarker,femurShaftLocRot, headShaftRot, \
     # angleZX, angleZY,angleXY,translationDis, femurShaftLocRotMA, femurShaftLocRotMarkers, \
     # Condylar,ShaftProx,ShaftDist, CondylarMA,ShaftDistMA,CondylarMarkers, ShaftMarkers, wrapLocationsRot)
+    print("femurShaftLocRot")
+    print(femurShaftLocRot)
 
     return  innerBox, middleBox, innerBoxMA, innerBoxMarker, middleBoxMA, middleBoxMarker,femurShaftLocRot, headShaftRot, \
     angleZX, angleZY,angleXY,translationDis, femurShaftLocRotMA, femurShaftLocRotMarkers, \
