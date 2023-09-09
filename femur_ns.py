@@ -9,6 +9,7 @@ from struct2xml import struct2xml
 from coordinatesOpenSim import coordinatesOpenSim
 import os
 from scipy.spatial import Delaunay
+import csv
 
 def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, answerNameModelFemur,
              answerNameMarkerFemur, dataFemur, place):
@@ -16,8 +17,9 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
 	# Bone vertices
     # Convert the vertices into numpy array and find the polygons
 
-
+    print(dataFemur["PolyData"]["Piece"]["Points"]["DataArray"])
     femur = np.array(dataFemur["PolyData"]["Piece"]["Points"]["DataArray"].split()).astype(float)
+    print(femur)
     femur_2 = [femur[i:i+3] for i in range(0, len(femur), 3)]
     polyText = dataFemur["PolyData"]["Piece"]["Polys"]["DataArray"][0]
     
@@ -88,9 +90,17 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
     for i in range(1,len(poly3) - 1):
         polys.append(poly3[i] + 1)
     polys = np.array(polys)
+
     # print(polys)
     # polys = np.array(polys)
-    
+
+
+    # np.savetxt("polys.csv",
+    #     polys ,
+    #     delimiter =" ",
+    #     fmt =' %s')
+    # print("polys")
+    # print(polys.vertices)
     ## Rotation; step 1
     
     Ry_NS = np.array([[np.cos(NS_angle), 0, np.sin(NS_angle)],
@@ -201,14 +211,30 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
     #ax = plt.axes(projection='3d')
     # triangles=Delaunay(femur_rot1_all[:,:2]).simplices
     ## plot_trisurf or original
-    print("femur_NewAxis[:, 1]")
-    print(femur_NewAxis[:, 1])
+    # print("femur_NewAxis[:, 1]")
+    # print(femur_NewAxis[:, 1])
+
     # np.savetxt("femur_NewAxis.csv",
     #     femur_NewAxis,
     #     delimiter =" ",
-    #     fmt =' {:f}')
+    #     fmt =' %s')
+
+    # fields = ['0', '1', '2']
+
+    # with open('GFG', 'w') as f:
+    # # using csv.writer method from CSV package
+    #     write = csv.writer(f)
+    #     write.writerow(fields)
+    #     write.writerows(femur_NewAxis)
+    ##
+
+    ax.plot(femur_NewAxis[:, 0],femur_NewAxis[:, 1],femur_NewAxis[:, 2])
+    # ax.plot()
+    ##
     #ax.plot_trisurf(femur_rot1_all[:, 0], femur_rot1_all[:, 1], femur_rot1_all[:, 2], edgecolor='black', linestyle=':')
-    ax.plot_trisurf(femur_NewAxis[:, 0], femur_NewAxis[:, 1], femur_NewAxis[:, 2],antialiased = True, edgecolor='black')
+    trisurf = ax.plot_trisurf(femur_NewAxis[:, 0], femur_NewAxis[:, 1], femur_NewAxis[:, 2], triangles = poly3 , cmap = 'viridis', 
+                         alpha = 0.2,
+                         edgecolor = 'k') 
     ax.set_xlabel('x')
     ax.set_ylabel('y')
     ax.set_zlabel('z')
@@ -220,6 +246,7 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
 
     # #     for k in range(wrapCnt):
     # #         print(k)
+
 
     plt.show()
     for u in range(wrapCnt):
@@ -320,8 +347,8 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
         else:
             femurMarker_rot2_all[i, :] = femurMarker_rot1_all[i, :]
     
-    print("femur_rot2_all")
-    print(femur_rot2_all)
+    # print("femur_rot2_all")
+    # print(femur_rot2_all)
 
     #ax.plot_trisurf(femur_rot1_all[:, 0], femur_rot1_all[:, 1], femur_rot1_all[:, 2], edgecolor='black', linestyle=':')
     fig = plt.figure(figsize=(10, 20))
