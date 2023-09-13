@@ -20,27 +20,37 @@ The neck shaft angle (NSA) is defined as the angle between the neck axis and the
 
 ## Workflow of this Program
 <div align="center">
-  <img src=".github/Flow.png" width="300" >
+  <img src=".github/Flow.png" width="400" >
 </div>
 
-<h3><img align="right" height="30" src=".github/Flow.png"> TECHNOLOGIES</h3>
+
 The diagram above demonstrates the basic workflow of the program TorsionTool_Python.Once these values are obtained from the subject’s CT scan, two rotation angles are calculated by finding the difference between the subject’s AVA and NSA angles and the generic model’s AVA and NSA angles (Offset Method). After that, the 
 generic bone is sectioned into three parts (shown in 
-the figure on the right) and the transformation will 
-be performed separately. The vertices in the innerbox
+the figure below) and the transformation will 
+be performed separately. The vertices in the inner box
 rotate first through an offset angle corresponding to 
 the change in anteversion. Then the middlebox rotates 
 through an angle that is decreased linearly as a 
 function of superior-inferior distance along the axis. 
 In the final step, the outer box that contains the entire 
 femur is translated to restore the position of the 
-femoral head. After the program finished running, 
-a new subject-specific OpenSim model is generated 
+femoral head. After the program finishes running, 
+A new subject-specific OpenSim model is generated 
 with updated geometries.
 
 <div align="center">
-  <img src=".github/Flow.png" width="300" >
-</div>
+  <img src=".github/boxes.png" width="200" >
+</div> 
 
-1. Go to Main_FemurTorsionTool and the 
-2. Enter the desired AVA,NSA, and the torsion Angle
+## Installation
+
+## Instructions
+1. Go to Main_FemurTorsionTool
+2. Enter the desired AVA, NSA
+
+## References
+<div align="center">
+  <img src=".github/references.png" width="200" >
+</div> 
+
+
