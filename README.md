@@ -43,7 +43,10 @@ with updated geometries.
 </div> 
 
 ## Installation
-python -m pip install 'git+https://github.com/Jack-Zhiyuan-Ren/Ren_Femur_Twist_Python-copy.git'
+
+"python -m pip install 'git+https://github.com/Jack-Zhiyuan-Ren/Ren_Femur_Twist_Python-copy.git'"
+
+Exclude the double quotation mark when typing in terminal
 
 ## Instructions
 1. Go to Main_FemurTorsionTool.
