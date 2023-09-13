@@ -44,7 +44,9 @@ with updated geometries.
 
 ## Installation
 
-"python -m pip install 'git+https://github.com/Jack-Zhiyuan-Ren/Ren_Femur_Twist_Python-copy.git'"
+1. On GitHub.com, navigate to the main page of the repository.
+2. Above the list of files, click  Code.
+3. Click Download ZIP.
 
 Please exclude the double quotation mark when typing in the terminal.
 
