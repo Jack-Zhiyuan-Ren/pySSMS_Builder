@@ -46,11 +46,20 @@ with updated geometries.
 
 1. On GitHub.com, navigate to the main page of the repository.
 2. Above the list of files, click  Code.
-3. Click Download ZIP.
 
-Please exclude the double quotation mark when typing in the terminal.
+<div align="center">
+  <img src=".github/code-button.png" width="300" >
+</div> 
+
+3. Click Download ZIP.
+4. Extract all the files to a designated folder
+<div align="center">
+  <img src=".github/Extract.png" width="300" >
+</div> 
+
 
 ## Instructions
+0. Before running the program. Make sure 
 1. Go to Main_FemurTorsionTool.
 2. Enter the AVA and NSA measured from the CT scan.
 
