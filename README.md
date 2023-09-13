@@ -46,7 +46,7 @@ with updated geometries.
 
 "python -m pip install 'git+https://github.com/Jack-Zhiyuan-Ren/Ren_Femur_Twist_Python-copy.git'"
 
-Exclude the double quotation mark when typing in the terminal.
+Please exclude the double quotation mark when typing in the terminal.
 
 ## Instructions
 1. Go to Main_FemurTorsionTool.
