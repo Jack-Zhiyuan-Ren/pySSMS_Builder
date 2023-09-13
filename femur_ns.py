@@ -242,7 +242,7 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
         ax.set_zlim3d([z_middle - plot_radius, z_middle + plot_radius])
 # =============================================================================
     
-    fig = plt.figure(figsize=(10, 10))
+    fig = plt.figure(figsize=(16, 9))
     # ax = fig.add_subplot(111, projection='3d')    #original
     ax = fig.add_subplot(111, projection='3d')
     #ax = plt.axes(projection='3d')
@@ -400,7 +400,7 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
     # print(femur_rot2_all)
 
     #ax.plot_trisurf(femur_rot1_all[:, 0], femur_rot1_all[:, 1], femur_rot1_all[:, 2], edgecolor='black', linestyle=':')
-    fig = plt.figure(figsize=(10, 20))
+    fig = plt.figure(figsize=(16, 9))
     ax1 = fig.add_subplot(211, projection='3d')
     ax1.scatter(femur_rot2_all[:, 0], femur_rot2_all[:, 1], femur_rot2_all[:, 2], color='none', edgecolor='black', linestyle=':')
     ax1.scatter(femur_NewAxis[:, 0], femur_NewAxis[:, 1], femur_NewAxis[:, 2], color='none', edgecolor='black')
@@ -427,7 +427,7 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
     ax2.set_yticklabels([])
     ax2.set_zticklabels([])
 
-    plt.show()
+   #plt.show()
     
     maxZ = np.max(middleBox[:, 2])
     minZ = np.min(middleBox[:, 2])
