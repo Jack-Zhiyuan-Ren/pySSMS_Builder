@@ -99,6 +99,11 @@ def make_PEmodel_FemurOnly(answerModel, deformed_model, answerMarkerSet, deform_
         angleCorrection = answerDegFemur  # - FA_preAngle
         FA_angle = -(angleCorrection * (np.pi / 180))
         NS_angle = -((angle_NS) * (np.pi / 180))
+        # print('FA_angle Make PE')
+        # print(FA_angle)
+        # print("NS_angle")
+        # print(NS_angle)
+
         # The geometry of the right femur is imported
         dataFemur = xml2struct(os.path.join(geometryFolder, femur_filename))
     else:  # Rotation of the left foot

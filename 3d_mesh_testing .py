@@ -150,7 +150,7 @@ my_cmap = plt.get_cmap('hot')
 for i in range(len(data5)):
     for j in range(len(data5[i])):
         data5[i][j] = data5[i][j] - 1
-#
+print(data5)
 #print(triangles)
 ##
 
@@ -168,11 +168,11 @@ trisurf = ax.plot_trisurf(x_arr, y_arr, z_arr,
 
 #fig.colorbar(trisurf, ax = ax, shrink = 0.5, aspect = 5)
 ax.set_title('Tri-Surface plot')
- 
+#print(x_arr)
 # Adding labels
 ax.set_xlabel('X-axis', fontweight ='bold')
 ax.set_ylabel('Y-axis', fontweight ='bold')
 ax.set_zlabel('Z-axis', fontweight ='bold')
 set_axes_equal(ax)    
 #show plot
-plt.show()
+# plt.show()

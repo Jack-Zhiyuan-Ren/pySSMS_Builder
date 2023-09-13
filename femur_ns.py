@@ -17,9 +17,9 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
 	# Bone vertices
     # Convert the vertices into numpy array and find the polygons
 
-    print(dataFemur["PolyData"]["Piece"]["Points"]["DataArray"])
+    #print(dataFemur["PolyData"]["Piece"]["Points"]["DataArray"])
     femur = np.array(dataFemur["PolyData"]["Piece"]["Points"]["DataArray"].split()).astype(float)
-    print(femur)
+    #print(femur)
     femur_2 = [femur[i:i+3] for i in range(0, len(femur), 3)]
     polyText = dataFemur["PolyData"]["Piece"]["Polys"]["DataArray"][0]
     
@@ -29,8 +29,8 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
     # print(femurMuscle)
     # Find the markers attached to the femur in OpenSim
     _, _, _, _, markerFemur, markerFemurNR = OpenSimMarkers(markerset, answerLeg, rightbone)
-    print("markerFemur")
-    print(markerFemur)
+    # print("markerFemur")
+    # print(markerFemur)
     
     
     
@@ -86,10 +86,36 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
     poly3 = []
     for i in range(len(polysplit)):
         poly3.append(np.array(polysplit[i].split()).astype(float))
+    
+    
+
     polys = []
     for i in range(1,len(poly3) - 1):
-        polys.append(poly3[i] + 1)
+        polys.append(poly3[i])
     polys = np.array(polys)
+
+
+    # print("polys")
+    # print(polys)
+
+    polys_x = []
+    polys_y = []
+    polys_z = []
+
+
+    for i in range(len(polys)):
+        polys_x.append(np.float64(polys[i][0]))
+
+    for i in range(len(polys)):
+        polys_y.append(np.float64(polys[i][1]))
+
+    for i in range(len(polys)):
+        polys_z.append(np.float64(polys[i][2]))
+
+    poly4 = np.column_stack((polys_x,polys_y,polys_z))
+
+    # print("poly4")
+    # print(poly4)
 
     # print(polys)
     # polys = np.array(polys)
@@ -103,17 +129,28 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
     # print(polys.vertices)
     ## Rotation; step 1
     
+    # print('NS_angle')
+    # print(NS_angle)
+    # print("FA_angle")
+    # print(FA_angle)
+
     Ry_NS = np.array([[np.cos(NS_angle), 0, np.sin(NS_angle)],
                   [0, 1, 0],
                   [-np.sin(NS_angle), 0, np.cos(NS_angle)]])  # neck shaft angle
     Rz_FA = np.array([[np.cos(FA_angle), -np.sin(FA_angle), 0],
                       [np.sin(FA_angle), np.cos(FA_angle), 0],
                       [0, 0, 1]])  # femoral anteversion
+    
     RotMatrix = np.dot(Rz_FA, Ry_NS)
 
     femur_rot1_all = []
     innerBox_rot1 = []
     polys_innerNumber = []
+
+    
+    # print('RotMatrix')
+    # print(RotMatrix)
+
     for i in range(len(femur_NewAxis)):
         if np.any(np.all(femur_NewAxis[i, :] == innerBox, axis=1)):
             item_innerBox = np.dot(RotMatrix, femur_NewAxis[i, :].reshape(-1, 1)).flatten()
@@ -228,13 +265,25 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
     #     write.writerows(femur_NewAxis)
     ##
 
-    ax.plot(femur_NewAxis[:, 0],femur_NewAxis[:, 1],femur_NewAxis[:, 2])
+    #ax.plot(femur_NewAxis[:, 0],femur_NewAxis[:, 1],femur_NewAxis[:, 2], 'bo', ms = 2)
     # ax.plot()
     ##
-    #ax.plot_trisurf(femur_rot1_all[:, 0], femur_rot1_all[:, 1], femur_rot1_all[:, 2], edgecolor='black', linestyle=':')
-    trisurf = ax.plot_trisurf(femur_NewAxis[:, 0], femur_NewAxis[:, 1], femur_NewAxis[:, 2], triangles = poly3 , cmap = 'viridis', 
+
+    print('femur_rot1_all')
+    print(femur_rot1_all)
+    ax.plot_trisurf(femur_rot1_all[:, 0], femur_rot1_all[:, 1], femur_rot1_all[:, 2],triangles = poly4
+                    , edgecolor='black', linestyle=':')
+    ax.plot_trisurf(femur_NewAxis[:, 0], 
+                              femur_NewAxis[:, 1], 
+                              femur_NewAxis[:, 2], 
+                              triangles = poly4 ,  
                          alpha = 0.2,
-                         edgecolor = 'k') 
+                         edgecolor = 'w') 
+    # print("type(poly3)")
+    # print(type(poly3))
+
+    
+
     ax.set_xlabel('x')
     ax.set_ylabel('y')
     ax.set_zlabel('z')

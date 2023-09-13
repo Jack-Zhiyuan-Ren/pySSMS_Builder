@@ -51,7 +51,7 @@ angle_NS_right = 180  # right neck-shaft angle (in degrees)
 deformed_model = 'rightNSA'+  str(angle_NS_right) + '_rightAVA' + str(angle_AV_right)
 
 
-make_PEmodel_FemurOnly(model, deformed_model, markerset, deform_bone, which_leg, angle_AV_right, angle_NS_right, GeometryFolder,)
+make_PEmodel_FemurOnly(model, deformed_model, markerset, deform_bone, which_leg, angle_AV_right - default_Anteversion, angle_NS_right - default_NeckShaftAngle, GeometryFolder,)
 
 # model = deformed_model + '.osim'
 # markerset = deformed_model + '_' + markerset
