@@ -59,9 +59,10 @@ with updated geometries.
 
 
 ## Instructions
-0. Before running the program. Make sure 
-1. Go to Main_FemurTorsionTool.
-2. Enter the AVA and NSA measured from the CT scan.
+0. Before running the program. Make sure to install [numpy](https://numpy.org/install/), [scipy](https://scipy.org/install/), and [matplotlib](https://stackoverflow.com/questions/37661119/python-mpl-toolkits-installation-issue) modules
+   
+2. Go to Main_FemurTorsionTool.
+3. Enter the AVA and NSA measured from the CT scan.
 
 ## References
 <div align="left">
