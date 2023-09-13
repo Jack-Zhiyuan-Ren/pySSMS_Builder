@@ -43,14 +43,15 @@ with updated geometries.
 </div> 
 
 ## Installation
+python -m pip install 'git+https://github.com/Jack-Zhiyuan-Ren/Ren_Femur_Twist_Python-copy.git'
 
 ## Instructions
-1. Go to Main_FemurTorsionTool
-2. Enter the desired AVA, NSA
+1. Go to Main_FemurTorsionTool.
+2. Enter the AVA and NSA measured from the CT scan.
 
 ## References
-<div align="center">
-  <img src=".github/references.png" width="200" >
+<div align="left">
+  <img src=".github/Reference.png" width="400" >
 </div> 
 
 
