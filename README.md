@@ -70,7 +70,7 @@ with updated geometries.
 3. Enter the AVA and NSA measured from the CT scan.
 For Mac users if the following error is encountered.
 <div align="left">
-  <img src=".github/File_not_found.png" width="400" >
+  <img src=".github/File_not_found_error.png" width="400" >
 </div> 
 Go to "Make_PEmodel" file, change the "/" to "\" as shown in the following image.
 <div align="left">
