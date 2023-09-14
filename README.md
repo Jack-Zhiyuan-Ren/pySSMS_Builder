@@ -60,11 +60,12 @@ with updated geometries.
 
 ## Instructions
 0. Before running the program. Make sure to install [numpy](https://numpy.org/install/), [scipy](https://scipy.org/install/), and [matplotlib](https://stackoverflow.com/questions/37661119/python-mpl-toolkits-installation-issue) modules
-1. Fix the folder file path to your own current directory path and keep the "/DEFORMED_MODEL"
+1. In the the "Ren_Femur_Twist_Python-copy-main" folder, create a new folder called "DEFORMED_MODEL".
+2. Fix the folder file path to your own current directory path and keep the "/DEFORMED_MODEL"
 <div align="left">
   <img src=".github/Direction2.png" width="400" >
 </div> 
- 
+
 2. Go to Main_FemurTorsionTool.
 3. Enter the AVA and NSA measured from the CT scan.
 
