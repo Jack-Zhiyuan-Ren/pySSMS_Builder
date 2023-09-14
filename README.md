@@ -68,7 +68,10 @@ with updated geometries.
 
 2. Go to Main_FemurTorsionTool.
 3. Enter the AVA and NSA measured from the CT scan.
-4. 
+For Mac users if the following errors is encountered.
+<div align="left">
+  <img src=".github/Direction2.png" width="400" >
+</div> 
 
 ## References
 <div align="left">
