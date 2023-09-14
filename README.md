@@ -60,7 +60,7 @@ with updated geometries.
 
 ## Instructions
 0. Before running the program. Make sure to install [numpy](https://numpy.org/install/), [scipy](https://scipy.org/install/), and [matplotlib](https://stackoverflow.com/questions/37661119/python-mpl-toolkits-installation-issue) modules
-1. Fix the folder file path to your own current directory path and keep the "\DEFORMED_MODEL"
+1. Fix the folder file path to your own current directory path and keep the "/DEFORMED_MODEL"
 <div align="left">
   <img src=".github/Direction2.png" width="400" >
 </div> 
