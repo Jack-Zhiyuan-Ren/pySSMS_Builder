@@ -22,8 +22,8 @@ def make_PEmodel_FemurOnly(answerModel, deformed_model, answerMarkerSet, deform_
     
     dataModel = xml2struct(answerModel)
     
-    if not os.path.exists("DEFROMED_MODEL/Geometry"):
-        os.mkdir("DEFROMED_MODEL/Geometry")
+    if not os.path.exists("DEFORMED_MODEL/Geometry"):
+        os.mkdir("DEFORMED_MODEL/Geometry")
         
     if deform_bone == 'F' and which_leg == 'R':
         for i in range(len(dataModel["Model"]["BodySet"]["objects"]["Body"])):
