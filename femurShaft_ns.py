@@ -49,8 +49,8 @@ def femurShaft_ns(dataModel, femur_start, answerLeg, rightbone, femurMuscle_star
 
     # the markers
     femurShaftLocMarkers = markerFemur_start + translationDis
-    print('femurShaftLocMarkers')
-    print(femurShaftLocMarkers)
+    # print('femurShaftLocMarkers')
+    # print(femurShaftLocMarkers)
     aZY = np.array([SEL_epiShaft[1],SEL_epiShaft[2]]) - np.array([0, 0])
     bZY = np.array([0, -0.4]) - np.array([0, 0])
     angleZY = np.arccos(np.dot(aZY, bZY) / (np.linalg.norm(aZY) * np.linalg.norm(bZY)))
@@ -95,19 +95,19 @@ def femurShaft_ns(dataModel, femur_start, answerLeg, rightbone, femurMuscle_star
     femurShaftLocRotMA = np.transpose(np.dot(R_transfer, np.transpose(femurShaftLocMA)))
 
     femurShaftLocRotMarkers = []
-    print('R_Transfer')
-    print(R_transfer)
-    print('markerFemur_start')
-    print(markerFemur_start)
+    # print('R_Transfer')
+    # print(R_transfer)
+    # print('markerFemur_start')
+    # print(markerFemur_start)
 
     for i in range(markerFemur_start.shape[0]):
         item = np.transpose(np.matmul(R_transfer, femurShaftLocMarkers[i]))
-        print("R_transfer")
-        print(R_transfer)
-        print("markerFemur_start[i]")
-        print(np.transpose(markerFemur_start)[i])
-        print("item")
-        print(item)
+        # print("R_transfer")
+        # print(R_transfer)
+        # print("markerFemur_start[i]")
+        # print(np.transpose(markerFemur_start)[i])
+        # print("item")
+        # print(item)
         femurShaftLocRotMarkers.append(item)
 
     femurShaftLocRotMarkers = np.array(femurShaftLocRotMarkers)
@@ -194,8 +194,8 @@ def femurShaft_ns(dataModel, femur_start, answerLeg, rightbone, femurMuscle_star
     FemurShaftAxisMarkers = SEL_epiShaftRot - SEL_pointShaftRot  # vector from bottom to top
     magn_FemurShaftAxisMarkers = np.linalg.norm(FemurShaftAxisMarkers)
     
-    print('femurShaftLocRotMarkers')
-    print(femurShaftLocRotMarkers)
+    # print('femurShaftLocRotMarkers')
+    # print(femurShaftLocRotMarkers)
     
     for i in range(femurShaftLocRotMarkers.shape[0]):
         itemVector = femurShaftLocRotMarkers[i, :] - SEL_pointShaftRot  # vector from each point to the max point
@@ -248,8 +248,8 @@ def femurShaft_ns(dataModel, femur_start, answerLeg, rightbone, femurMuscle_star
     # print(innerBox, middleBox, innerBoxMA, innerBoxMarker, middleBoxMA, middleBoxMarker,femurShaftLocRot, headShaftRot, \
     # angleZX, angleZY,angleXY,translationDis, femurShaftLocRotMA, femurShaftLocRotMarkers, \
     # Condylar,ShaftProx,ShaftDist, CondylarMA,ShaftDistMA,CondylarMarkers, ShaftMarkers, wrapLocationsRot)
-    print("femurShaftLocRot")
-    print(femurShaftLocRot)
+    # print("femurShaftLocRot")
+    # print(femurShaftLocRot)
 
     return  innerBox, middleBox, innerBoxMA, innerBoxMarker, middleBoxMA, middleBoxMarker,femurShaftLocRot, headShaftRot, \
     angleZX, angleZY,angleXY,translationDis, femurShaftLocRotMA, femurShaftLocRotMarkers, \

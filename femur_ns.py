@@ -269,8 +269,8 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
     # ax.plot()
     ##
 
-    print('femur_rot1_all')
-    print(femur_rot1_all)
+    # print('femur_rot1_all')
+    # print(femur_rot1_all)
     ax.plot_trisurf(femur_rot1_all[:, 0], femur_rot1_all[:, 1], femur_rot1_all[:, 2],triangles = poly4
                     , edgecolor='black', linestyle=':')
     ax.plot_trisurf(femur_NewAxis[:, 0], 
@@ -396,14 +396,16 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
         else:
             femurMarker_rot2_all[i, :] = femurMarker_rot1_all[i, :]
     
-    # print("femur_rot2_all")
-    # print(femur_rot2_all)
-
+    print("femur_rot2_all")
+    print(femur_rot2_all)
+    
     #ax.plot_trisurf(femur_rot1_all[:, 0], femur_rot1_all[:, 1], femur_rot1_all[:, 2], edgecolor='black', linestyle=':')
     fig = plt.figure(figsize=(16, 9))
     ax1 = fig.add_subplot(211, projection='3d')
-    ax1.scatter(femur_rot2_all[:, 0], femur_rot2_all[:, 1], femur_rot2_all[:, 2], color='none', edgecolor='black', linestyle=':')
-    ax1.scatter(femur_NewAxis[:, 0], femur_NewAxis[:, 1], femur_NewAxis[:, 2], color='none', edgecolor='black')
+    ax1.plot_trisurf(femur_rot2_all[:, 0], femur_rot2_all[:, 1], femur_rot2_all[:, 2],
+                     triangles = poly4, edgecolor='black', linestyle=':')
+    ax1.plot_trisurf(femur_NewAxis[:, 0], femur_NewAxis[:, 1], femur_NewAxis[:, 2],
+                     triangles = poly4, alpha = 0.2, edgecolor = 'w')
     ax1.set_box_aspect([1, 1, 1])
     ax1.view_init(30, -10)
     ax1.grid(True)
@@ -413,7 +415,7 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
     ax1.set_xticklabels([])
     ax1.set_yticklabels([])
     ax1.set_zticklabels([])
-    
+    set_axes_equal(ax1)
     
 
     ax2 = fig.add_axes([0.65, 0.25, 0.35, 0.55], projection='3d')
@@ -426,8 +428,9 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
     ax2.set_xticklabels([])
     ax2.set_yticklabels([])
     ax2.set_zticklabels([])
+    #set_axes_equal(ax2)
 
-   #plt.show()
+    plt.show()
     
     maxZ = np.max(middleBox[:, 2])
     minZ = np.min(middleBox[:, 2])
