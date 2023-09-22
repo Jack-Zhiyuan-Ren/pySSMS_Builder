@@ -76,7 +76,7 @@ Go to "Make_PEmodel" file, change the "/" to "\" as shown in the following image
 <div align="left">
   <img src=".github/fix.png" width="400" >
 </div> 
-#If error: Rajagoal/Rajagopal2015.osim pops up, make sure to open the folder in the VScode explorer.
+# If error "Rajagoal/Rajagopal2015.osim not found" pops up, make sure to open the folder in the VScode explorer.
 
 ## References
 <div align="left">
