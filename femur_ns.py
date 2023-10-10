@@ -47,7 +47,7 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
     wrapRotations = []
     wrapIndizes = []
         
-
+    print(len(dataModel["Model"]["BodySet"]["objects"]["Body"][2]["WrapObjectSet"]["objects"]["WrapCylinder"][0]))
 
     for i in range(1,len(dataModel["Model"]["BodySet"]["objects"]["Body"])):
         if 'femur_' + answerLeg.lower() in dataModel["Model"]["BodySet"]["objects"]["Body"][i]["Joint"]["CustomJoint"]["parent_body"]:
@@ -56,21 +56,32 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
                 #print("yes 2")
                 if "objects" in dataModel["Model"]["BodySet"]["objects"]["Body"][i]["WrapObjectSet"]:
                     #print("yes 3")
-                    wrapObjectTypes = dataModel["Model"]["BodySet"]["objects"]["Body"][i]["WrapObjectSet"]["objects"]["WrapCylinder"]
+                    wrapObjectTypes = dataModel["Model"]["BodySet"]["objects"]["Body"][i - 1]["WrapObjectSet"]["objects"]["WrapCylinder"]
+                    # print("(wrapObjectTypes)")
+                    # print(wrapObjectTypes)
                     for j in range(len(wrapObjectTypes)):
-                        wrapRotations.append(list(map(float, dataModel["Model"]["BodySet"]["objects"]["Body"][i]["WrapObjectSet"]["objects"]["WrapCylinder"][j]["xyz_body_rotation"].split())))
-                        wrapLocations.append(list(map(float, dataModel["Model"]["BodySet"]["objects"]["Body"][i]["WrapObjectSet"]["objects"]["WrapCylinder"][j]["xyz_body_rotation"].split())))
-                        for k in range(len(dataModel["Model"]["BodySet"]["objects"]["Body"][i]["WrapObjectSet"]["objects"]["WrapCylinder"][j])):
-                            wrapCnt += 1
-                            wrapIndizes.append([i, j, k])
+                        # print("len(wrapObjectTypes)")
+                        # print(len(wrapObjectTypes))
+                        wrapRotations.append(list(map(float, dataModel["Model"]["BodySet"]["objects"]["Body"][i - 1]["WrapObjectSet"]["objects"]["WrapCylinder"][j]["xyz_body_rotation"].split())))
+                        wrapLocations.append(list(map(float, dataModel["Model"]["BodySet"]["objects"]["Body"][i - 1]["WrapObjectSet"]["objects"]["WrapCylinder"][j]["translation"].split())))
+                    for k in range(len(dataModel["Model"]["BodySet"]["objects"]["Body"][i-1]["WrapObjectSet"]["objects"]["WrapCylinder"][j])):
+                        wrapCnt += 1
+                        print('k')
+                        print(k)
+                        wrapIndizes.append([i, j, k])
             break
-    # print(wrapLocations)
+    
+    wrapCnt += 1
+
     # print(wrapRotations)
     # print(wrapIndizes)
 
     wrapRotations_New = wrapRotations.copy()
     wrapLocations_New = wrapLocations.copy()
     wrapLocations = coordinatesCorrection(wrapLocations)
+
+    # print('wrapLocations in femur ns')
+    # print(wrapLocations)
 
     innerBox, middleBox, innerBoxMA, innerBoxMarker, middleBoxMA, middleBoxMarker, femur_NewAxis, H_transfer, \
     angleZX, angleZY, angleXY, centroidValueLGtroch, femurMA_NewAxis, femurMarker_NewAxis, \
@@ -94,9 +105,9 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
         polys.append(poly3[i])
     polys = np.array(polys)
 
-
-    # print("polys")
-    # print(polys)
+    # print('polys')
+    # for k in range(polys.shape[0]):
+    #      print(polys[k])
 
     polys_x = []
     polys_y = []
@@ -159,7 +170,10 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
             polys_innerNumber.append(i + 1)
         else:
             femur_rot1_all.append(femur_NewAxis[i, :])
-            
+
+    # print("polys_innerNumber")
+    # print(polys_innerNumber)
+
     # print('femur_NewAxis')
     # print(femur_NewAxis)
     femur_rot1_all_2 = femur_rot1_all  
@@ -182,15 +196,27 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
     # for i in femur_rot1_all: 
     #     print(i)
 
-    # zeroMatrix = np.zeros_like(polys)
-    # for ii in range(len(polys_innerNumber)):
-    #     zeroMatrix += (polys == polys_innerNumber[ii])
-
-    # polys_inner = []
+    zeroMatrix = np.zeros_like(polys)
+    for ii in range(len(polys_innerNumber)):
+        zeroMatrix += (polys == polys_innerNumber[ii])
+        # print('polys == polys_innerNumber[ii]')
+        # print(polys == polys_innerNumber[ii])
+    
+    # print('zeroMatrix')
     # for k in range(zeroMatrix.shape[0]):
-    #     if np.sum(zeroMatrix[k, :]) == 3:
-    #         polys_inner.append(polys[k, :])
-    # polys_inner = np.array(polys_inner)
+    #     print(zeroMatrix[k])
+
+    polys_inner = []
+    for k in range(zeroMatrix.shape[0]):
+        if np.sum(zeroMatrix[k, :]) == 3:
+            polys_inner.append(poly4[k, :])
+    polys_inner = np.array(polys_inner)
+
+    
+    # print('polys_inner')
+
+    # for k in range(polys_inner.shape[0]):
+    #      print(polys_inner[k])
 
     femurMA_rot1_all = []
     for i in range(len(femurMA_NewAxis)):
@@ -347,15 +373,27 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
         else:
             femur_rot2_all[i, :] = femur_rot1_all[i, :]
     
+    # print("polys_middle_Number")
+    # print(polys_middle_Number)
+
     zeroMatrix = np.zeros_like(polys)
+
     for ii in polys_middle_Number:
         zeroMatrix += (polys == ii)
     
+    # print("zeroMatrix")
+    
+
     polys_middle = []
     for k in range(zeroMatrix.shape[0]):
         if np.sum(zeroMatrix[k, :]) == 3:
             polys_middle.append(polys[k, :])
     
+    # print('polys_middle')
+    # for i in range(len(polys_middle)):
+    #     print(polys_middle[i])
+    
+
     femurMA_rot2_all = np.zeros_like(femurMA_rot1_all)
     middleBoxMA_rot2 = []
     middleBoxMA_before_rot = []
@@ -396,8 +434,8 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
         else:
             femurMarker_rot2_all[i, :] = femurMarker_rot1_all[i, :]
     
-    print("femur_rot2_all")
-    print(femur_rot2_all)
+    # print("femur_rot2_all")
+    # print(femur_rot2_all)
     
     #ax.plot_trisurf(femur_rot1_all[:, 0], femur_rot1_all[:, 1], femur_rot1_all[:, 2], edgecolor='black', linestyle=':')
     fig = plt.figure(figsize=(16, 9))
@@ -419,16 +457,16 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
     
 
     ax2 = fig.add_axes([0.65, 0.25, 0.35, 0.55], projection='3d')
-    ax2.scatter(femur_rot2_all[:, 0], femur_rot2_all[:, 1], femur_rot2_all[:, 2], color='none', edgecolor='black', linestyle=':')
-    ax2.scatter(femur_NewAxis[:, 0], femur_NewAxis[:, 1], femur_NewAxis[:, 2], color='none', edgecolor='black')
-    ax2.scatter(femur_rot2_all[:, 0], femur_rot2_all[:, 1], femur_rot2_all[:, 2], color='none', edgecolor='black', linestyle=':')
-    ax2.scatter(femur_NewAxis[:, 0], femur_NewAxis[:, 1], femur_NewAxis[:, 2], color='none', edgecolor='black')
+    ax2.plot_trisurf(femur_rot2_all[:, 0], femur_rot2_all[:, 1], femur_rot2_all[:, 2],triangles = polys_middle,color='none', edgecolor='black', linestyle=':')
+    ax2.plot_trisurf(femur_NewAxis[:, 0], femur_NewAxis[:, 1], femur_NewAxis[:, 2],triangles = polys_middle, color='none', edgecolor='black')
+    ax2.plot_trisurf(femur_rot2_all[:, 0], femur_rot2_all[:, 1], femur_rot2_all[:, 2],triangles = polys_inner, color='none', edgecolor='black', linestyle=':')
+    ax2.plot_trisurf(femur_NewAxis[:, 0], femur_NewAxis[:, 1], femur_NewAxis[:, 2],triangles = polys_inner, color='none', edgecolor='black')
     ax2.set_box_aspect([1, 1, 1])
     ax2.view_init(30, -10)
     ax2.set_xticklabels([])
     ax2.set_yticklabels([])
     ax2.set_zticklabels([])
-    #set_axes_equal(ax2)
+    set_axes_equal(ax2)
 
     plt.show()
     
@@ -536,11 +574,11 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
 
     # print("wrapLocations_NewAxis")
     # print(wrapLocations_NewAxis)
-    # print("wrapCnt")
-    # print(wrapCnt)
+    print("wrapCnt")
+    print(wrapCnt)
     #wrapCnt is 48 but there are only 6 wrapLcoations_NewAxis
 
-    for i in range(wrapCnt):
+    for i in range(wrapCnt - 1):
         currLoc = wrapLocations_NewAxis[i]
         # print("wrapRotations_New[i]")
         # print(wrapRotations_New[i])
