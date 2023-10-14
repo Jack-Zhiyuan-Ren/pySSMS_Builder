@@ -87,9 +87,9 @@ def femurShaft_ns(dataModel, femur_start, answerLeg, rightbone, femurMuscle_star
 
     wrapLocationsRot = np.dot(R_transfer, wrapLocations.T).T
 
-    print('in_femurShaft')
-    print('wrapLocationRot')
-    print(wrapLocationsRot)
+    # print('in_femurShaft')
+    # print('wrapLocationRot')
+    # print(wrapLocationsRot)
     
 
     SEL_epiShaftRot = np.dot(R_transfer, SEL_epiShaft.T).T

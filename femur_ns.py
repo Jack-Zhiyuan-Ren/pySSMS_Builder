@@ -47,7 +47,7 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
     wrapRotations = []
     wrapIndizes = []
         
-    print(len(dataModel["Model"]["BodySet"]["objects"]["Body"][2]["WrapObjectSet"]["objects"]["WrapCylinder"][0]))
+    #print(len(dataModel["Model"]["BodySet"]["objects"]["Body"][2]["WrapObjectSet"]["objects"]["WrapCylinder"][0]))
 
     for i in range(1,len(dataModel["Model"]["BodySet"]["objects"]["Body"])):
         if 'femur_' + answerLeg.lower() in dataModel["Model"]["BodySet"]["objects"]["Body"][i]["Joint"]["CustomJoint"]["parent_body"]:
@@ -66,8 +66,8 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
                         wrapLocations.append(list(map(float, dataModel["Model"]["BodySet"]["objects"]["Body"][i - 1]["WrapObjectSet"]["objects"]["WrapCylinder"][j]["translation"].split())))
                     for k in range(len(dataModel["Model"]["BodySet"]["objects"]["Body"][i-1]["WrapObjectSet"]["objects"]["WrapCylinder"][j])):
                         wrapCnt += 1
-                        print('k')
-                        print(k)
+                        # print('k')
+                        # print(k)
                         wrapIndizes.append([i, j, k])
             break
     
@@ -574,8 +574,8 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
 
     # print("wrapLocations_NewAxis")
     # print(wrapLocations_NewAxis)
-    print("wrapCnt")
-    print(wrapCnt)
+    # print("wrapCnt")
+    # print(wrapCnt)
     #wrapCnt is 48 but there are only 6 wrapLcoations_NewAxis
 
     for i in range(wrapCnt - 1):
@@ -592,17 +592,42 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
         if currLoc[2] < maxShaft_prox and currLoc[2] > minShaft_prox:
             scaler = (np.abs(np.linalg.norm(wrapLocations_New[i] - condyl_top)) - distance_shaft_distal) / distance_shaft_distal * transfer_step3
             wrapLocations_New[i] = wrapLocations_New[i] + coordinatesOpenSim(scaler)
-            
-            
-    for u in range(wrapCnt):
-        i = wrapIndizes[u, 0]
-        j = wrapIndizes[u, 1]
-        k = wrapIndizes[u, 2]
-        dataModel["Model"]["BodySet"]["objects"]["Body"][0, i]["WrapObjectSet"]["objects"].wrapObjectTypes[j][0, k].xyz_body_rotation.Text = str(wrapRotations_New[u, :])
-        dataModel["Model"]["BodySet"]["objects"]["Body"][0, i]["WrapObjectSet"]["objects"].wrapObjectTypes[j][0, k].translation.Text = str(wrapLocations_New[u, :])
+
+
+
+    wrapRotations_New_x = []
+    wrapRotations_New_y = []
+    wrapRotations_New_z = []
+
+
+    for i in range(len(wrapRotations_New)):
+        wrapRotations_New_x.append(np.float64(wrapRotations_New[i][0]))
+
+    for i in range(len(wrapRotations_New)):
+        wrapRotations_New_y.append(np.float64(wrapRotations_New[i][1]))
+
+    for i in range(len(wrapRotations_New)):
+        wrapRotations_New_z.append(np.float64(wrapRotations_New[i][2]))
+
+    wrapRotations_New_n = np.column_stack((wrapRotations_New_x,wrapRotations_New_y,wrapRotations_New_z))    
+    # print('wrapIndizes')
+    # print(wrapIndizes)
+    # print('wrapRotations_New_n')
+    # print(wrapRotations_New_n)
+
+    #print((dataModel["Model"]["BodySet"]["objects"]["Body"][2]["WrapObjectSet"]["objects"]["WrapCylinder"][2]["xyz_body_rotation"][0]))
+
+    # for u in range(wrapCnt):
+    #     i = wrapIndizes[u][0]
+    #     j = wrapIndizes[u][1]
+    #     k = wrapIndizes[u][2]
+    #     # print(dataModel["Model"]["BodySet"]["objects"]["Body"][0, i]["WrapObjectSet"]["objects"]["WrapCylinder"][j][0, k]["xyz_body_rotation"])
+    #     dataModel["Model"]["BodySet"]["objects"]["Body"][0, i]["WrapObjectSet"]["objects"]["WrapCylinder"][j][0, k]["xyz_body_rotation"] = str(wrapRotations_New_n[u, :])
+     
+    #     dataModel["Model"]["BodySet"]["objects"]["Body"][0, i]["WrapObjectSet"]["objects"]["WrapCylinder"][j][0, k]['translation'] = str(wrapLocations_New[u, :])
         
-        
-    if femurMA_NewAxis.size != 0:
+    
+    if femurMA_NewAxis.size == 0:
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')
         ax.scatter(femurMA_NewAxis[:, 0], femurMA_NewAxis[:, 1], femurMA_NewAxis[:, 2], c='b', s=20)
@@ -612,7 +637,7 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
         ax.set_zlabel('z')
         plt.show()
 
-
+##Rotate back to the the ZX plane
     angleZX_back = -angleZX
     angleZY_back = -angleZY
 
@@ -642,23 +667,30 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
 
     R_backOpenSim = Rx_FA @ Ry_FA @ Rz_FA
 
+
+    # print('femur_rot3_all_deform')
+    # print(femur_rot3_all_deform)
+
     femur_rot_back = np.zeros_like(femur_rot3_all_deform)
-    for i in range(femur_rot3_all_deform.shape[0]):
-        femur_rot_back_item = R_backOpenSim @ femur_rot3_all_deform[i, :].reshape(-1, 1)
+    for i in range(len(femur_rot3_all_deform)):
+        femur_rot_back_item = R_backOpenSim @ femur_rot3_all_deform[i].reshape(-1, 1)
         femur_rot_back[i, :] = femur_rot_back_item.flatten()
 
     femurMA_rot_back = np.zeros_like(femurMA_rot3_all_deform)
     for i in range(femurMA_rot3_all_deform.shape[0]):
-        femurMA_rot_back_item = R_backOpenSim @ femurMA_rot3_all_deform[i, :].reshape(-1, 1)
+        femurMA_rot_back_item = R_backOpenSim @ femurMA_rot3_all_deform[i].reshape(-1, 1)
         femurMA_rot_back[i, :] = femurMA_rot_back_item.flatten()
 
     femurMarker_rot_back = np.zeros_like(femurMarker_rot3_all_deform)
     for i in range(femurMarker_rot3_all_deform.shape[0]):
-        femurMarker_rot_back_item = R_backOpenSim @ femurMarker_rot3_all_deform[i, :].reshape(-1, 1)
+        femurMarker_rot_back_item = R_backOpenSim @ femurMarker_rot3_all_deform[i].reshape(-1, 1)
         femurMarker_rot_back[i, :] = femurMarker_rot_back_item.flatten()
 
     H_ZY_back = np.dot(R_backOpenSim, H_transfer.T).T
     
+    #Before: femurMarker_rot_back_item = R_backOpenSim @ femurMarker_rot3_all_deform[i, :].reshape(-1, 1)
+    #After: femurMarker_rot_back_item = R_backOpenSim @ femurMarker_rot3_all_deform[i].reshape(-1, 1)
+    ## 
     
     femur_back = np.zeros_like(femur_rot_back)
     for i in range(femur_rot_back.shape[0]):
@@ -683,13 +715,17 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
 
     fig = plt.figure(figsize=(5, 9.5), dpi=100)
     ax = fig.add_subplot(111, projection='3d')
-    ax.plot_trisurf(polys, femur_Rotated[:, 0], femur_Rotated[:, 1], femur_Rotated[:, 2],
+    ax.plot_trisurf(femur_Rotated[:, 0], femur_Rotated[:, 1], femur_Rotated[:, 2], triangles = poly4,
                     edgecolor='black', linestyle=':', cmap='gray')
-    ax.plot_trisurf(polys, femur_start[:, 0], femur_start[:, 1], femur_start[:, 2], edgecolor='black')
+    ax.plot_trisurf(femur_start[:, 0], femur_start[:, 1], femur_start[:, 2], triangles = poly4 ,edgecolor='black')
+
+
+
     if femurMA_Rotated.size != 0:
         ax.scatter3D(femurMA_Rotated[:, 0], femurMA_Rotated[:, 1], femurMA_Rotated[:, 2], color='red')
         ax.scatter3D(femurMuscle_start[:, 0], femurMuscle_start[:, 1], femurMuscle_start[:, 2],
                      s=20, color='blue')
+    
     ax.grid(True)
     ax.axis('equal')
     ax.set_xlabel('x')
