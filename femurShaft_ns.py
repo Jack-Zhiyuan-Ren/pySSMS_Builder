@@ -137,7 +137,7 @@ def femurShaft_ns(dataModel, femur_start, answerLeg, rightbone, femurMuscle_star
         else:
             Condylar.append(femurShaftLocRot[i, :])
     # print("shaft")
-    # print(Shaft[0] - [0.1, 0, 0])
+    # print(Shaft)
 
     # Divide the shaft into proximal and distalt part
     ShaftProx = []
@@ -152,7 +152,9 @@ def femurShaft_ns(dataModel, femur_start, answerLeg, rightbone, femurMuscle_star
             ShaftProx.append(Shaft[i])
         else:
             ShaftDist.append(Shaft[i])
-            
+
+    # print("ShaftDist")
+    # print(ShaftDist)       
 
     HeadNeckMA = []
     LesserTrocMA = []

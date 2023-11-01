@@ -491,12 +491,27 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
     transfer_step3 = H_transfer - innerBox_H_rot
 
     # find the distance between the highest value in the distal shaft to the highest value in the condylar
-    maxCondyl = np.max(Condyl_NewAxis[:][2])
+    #maxCondyl = np.max(Condyl_NewAxis[:][2])
+    maxCondyl = -50 #set the maxCondyl to a small number
+    for i in range(len(Condyl_NewAxis)):
+        if Condyl_NewAxis[i][2] > maxCondyl:
+            maxCondyl = Condyl_NewAxis[i][2]
+
+    # print('maxCondyl')
+    # print(maxCondyl)
+    # print("Condyl_NewAxis")
+    # for i in range(len(Condyl_NewAxis)):
+    #     print(Condyl_NewAxis[i])
+   
     condyl_top = np.zeros(3)
     for i in range(len(Condyl_NewAxis)):
         if Condyl_NewAxis[i][2] >= maxCondyl:
             condyl_top = Condyl_NewAxis[i]
-            
+
+    # print("condyl_top")
+    # print(condyl_top)
+
+
     minShaft_prox = np.min(Shaft_proximal[:][2])
     shaft_prox_min = np.zeros(3)
     for i in range(len(Shaft_proximal)):
@@ -509,23 +524,39 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
     femur_rot3_all_deform = []  # the outer box has been restored and the distal part of the femoral shaft is gradually deformed to fit the condylar (which does not move)
     
     
+    print("step 3")
     for i in range(femur_rot2_all.shape[0]):
         if np.any(np.all(femur_rot2_all[i] == Condyl_NewAxis, axis=1)):  # the condylar do not move but the rest is translated to restore the femoral head
             femur_rot3_all.append(femur_rot2_all[i])
+            # print("step 1")
+            # print("femur_rot2_all[i]")
+            # print(femur_rot2_all[i])
         else:
             item_rot3 = femur_rot2_all[i] + transfer_step3  # The outer box is transferred back to the position of the femoral head
+            # print(item_rot3)
             femur_rot3_all.append(item_rot3)
+    
 
         if np.any(np.all(femur_rot2_all[i] == Shaft_distal, axis=1)):
+            # print(Shaft_distal)
             scaler = (np.linalg.norm(femur_rot3_all[i] - condyl_top) - distance_shaft_distal) / distance_shaft_distal * transfer_step3
+            # print(scaler)
             item_rot3_distal = femur_rot3_all[i] + scaler
+            # print(item_rot3_distal)
             femur_rot3_all_deform.append(item_rot3_distal)
         else:
             # print(femur_rot3_all)  
             # print(femur_rot3_all_deform)
             femur_rot3_all_deform.append(femur_rot3_all[i])
-            
-    
+            # print(femur_rot3_all[i])
+    print("step 3")
+
+    # print("femur_rot3_all_deform")
+    # for i in range(len(femur_rot3_all_deform)):
+    #     print(femur_rot3_all_deform[i])
+
+
+
     femurMA_rot3_all = np.zeros_like(femurMA_rot2_all)
     femurMA_rot3_all_deform = np.zeros_like(femurMA_rot2_all)
     test = []
@@ -671,10 +702,21 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
     # print('femur_rot3_all_deform')
     # print(femur_rot3_all_deform)
 
+    # print("femur_rot3_all_deform")
+    # for i in range(len(femur_rot3_all_deform)):
+    #     print(femur_rot3_all_deform[i])
+
     femur_rot_back = np.zeros_like(femur_rot3_all_deform)
     for i in range(len(femur_rot3_all_deform)):
         femur_rot_back_item = R_backOpenSim @ femur_rot3_all_deform[i].reshape(-1, 1)
         femur_rot_back[i, :] = femur_rot_back_item.flatten()
+    
+
+
+
+    # print("femur_rot_back")
+    # for i in range(len(femur_rot_back)):
+    #     print(femur_rot_back[i])
 
     femurMA_rot_back = np.zeros_like(femurMA_rot3_all_deform)
     for i in range(femurMA_rot3_all_deform.shape[0]):
@@ -691,7 +733,8 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
     #Before: femurMarker_rot_back_item = R_backOpenSim @ femurMarker_rot3_all_deform[i, :].reshape(-1, 1)
     #After: femurMarker_rot_back_item = R_backOpenSim @ femurMarker_rot3_all_deform[i].reshape(-1, 1)
     ## 
-    
+    # print('centroidValueLGtroch')
+    # print(centroidValueLGtroch)
     femur_back = np.zeros_like(femur_rot_back)
     for i in range(femur_rot_back.shape[0]):
         femur_back_item = femur_rot_back[i, :] - centroidValueLGtroch
@@ -712,6 +755,10 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
     femur_Rotated = femur_back
     femurMA_Rotated = femurMA_back
     femurMarker_Rotated = femurMarker_back
+
+    print("femur_Rotated")
+    for i in range(len(femur_Rotated)):
+        print(femur_Rotated[i])
 
     fig = plt.figure(figsize=(5, 9.5), dpi=100)
     ax = fig.add_subplot(111, projection='3d')
