@@ -1,5 +1,8 @@
 # Torsion_Tool_Python
-<img src=".github/ThumbNailForGit.png" width="300" >
+<img src=".github/Finsihed_Femur.png" width="300" >
+The Transformed Femur
+
+
 
 Torsion_Tool_Python is a Python-based program that generates subject-specific musculoskeletal OpenSim models. The program requires two input angles, the Neck Shaft Angle(NSA) and the Anteversion Angle(AVA), which can be measured from the patient's CT scan.
 
