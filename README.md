@@ -1,6 +1,6 @@
 # Torsion_Tool_Python
 <div align="center">
-  <img src=".github/Finsihed_Femur.png" width="300" >
+  <img src=".github/Finsihed_Femur.png" width="500" >
 </div>
 <div align="center">
   <em>Transformed Femur</em>
