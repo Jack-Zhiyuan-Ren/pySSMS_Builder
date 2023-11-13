@@ -1,0 +1,108 @@
+try
+    muscles = dataModel.OpenSimDocument.Model.ForceSet.objects.Thelen2003Muscle{1,1};
+catch ME
+    if contains(ME.message,'Thelen2003Muscle')
+        muscles = dataModel.OpenSimDocument.Model.ForceSet.objects.Millard2012EquilibriumMuscle{1,1};
+        if strcmp(answerLeg, rightbone) == 1;
+            for i = 1 : numel(dataModel.OpenSimDocument.Model.BodySet.objects.Body)
+                if contains(dataModel.OpenSimDocument.Model.BodySet.objects.Body{1, i}.Attributes.name, 'femur_r')
+                    if isfield(dataModel.OpenSimDocument.Model.BodySet.objects.Body{1,i}, 'attached_geometry')
+%                         disp("yes 1")
+                        dataModel.OpenSimDocument.Model.BodySet.objects.Body{1,i}.attached_geometry...
+                            .Mesh.mesh_file = c;
+                    else
+                        dataModel.OpenSimDocument.Model.BodySet.objects.Body{1,i}.VisibleObject...
+                            .GeometrySet.objects.DisplayGeometry.geometry_file.Text = c;
+%                         disp("yes 2")
+                    end
+                    break;
+                end
+            end
+        else
+            for i = 1 : numel(dataModel.OpenSimDocument.Model.BodySet.objects.Body)
+                if contains(dataModel.OpenSimDocument.Model.BodySet.objects.Body{1, i}.Attributes.name, 'femur_l')
+                    if isfield(dataModel.OpenSimDocument.Model.BodySet.objects.Body{1,i}, 'attached_geometry')
+                        dataModel.OpenSimDocument.Model.BodySet.objects.Body{1,i}.attached_geometry...
+                            .Mesh.mesh_file = c;
+                        disp("yes 3")
+                    else
+                        dataModel.OpenSimDocument.Model.BodySet.objects.Body{1,i}.VisibleObject...
+                            .GeometrySet.objects.DisplayGeometry.geometry_file.Text = c;
+                        disp("yes 4")
+                    end
+                    break;
+                end
+            end
+        end
+
+
+        for i = 1:size(femurMuscle,1)
+            if contains(femurPlace1{i}, '{')
+                ind = strfind(femurPlace1{i}, '{');
+                tmp_place = femurPlace1{i}(1 : ind-1);
+                dataModel.OpenSimDocument.Model.ForceSet.objects.(femurMuscleType{i}){1, femurNR(i)}...
+                    .GeometryPath.PathPointSet.objects.(tmp_place){1,str2double(femurPlace1{i}(end-1))}.location.Text = femurMuscle_OpenSim(i,:);
+                disp("yes 5")
+            else
+                tmp_place = femurPlace1{i};
+                dataModel.OpenSimDocument.Model.ForceSet.objects.(femurMuscleType{i}){1, femurNR(i)}...
+                    .GeometryPath.PathPointSet.objects.(tmp_place).location.Text = femurMuscle_OpenSim(i,:);
+                disp("yes 6")
+            end
+        end
+        for i = 1:size(markerFemur_start,1)
+            musclenr = markerFemurNR(i,:);
+            markerset.OpenSimDocument.MarkerSet.objects.Marker{1,musclenr}.location.Text = femurMarker_OpenSim(i,:);
+            disp("yes 7")
+        end
+    else
+        error('Unknown Error in femur_ns regarding ForceSet-Muscles to identify model basis (gait or rajagopal?) check try-catch blocks')
+    end
+end
+
+## Python
+
+try:
+    muscles = dataModel.OpenSimDocument.Model.ForceSet.objects.Thelen2003Muscle[0, 0]
+except Exception as ME:
+    if 'Thelen2003Muscle' in str(ME):
+        muscles = dataModel.OpenSimDocument.Model.ForceSet.objects.Millard2012EquilibriumMuscle[0, 0]
+        
+        if answerLeg == rightbone:
+            for i in range(len(dataModel.OpenSimDocument.Model.BodySet.objects.Body)):
+                if 'femur_r' in dataModel.OpenSimDocument.Model.BodySet.objects.Body[0, i].Attributes.name:
+                    if hasattr(dataModel.OpenSimDocument.Model.BodySet.objects.Body[0, i], 'attached_geometry'):
+                        dataModel.OpenSimDocument.Model.BodySet.objects.Body[0, i].attached_geometry.Mesh.mesh_file = c
+                    else:
+                        dataModel.OpenSimDocument.Model.BodySet.objects.Body[0, i].VisibleObject.GeometrySet.objects.DisplayGeometry.geometry_file.Text = c
+                    break
+        else:
+            for i in range(len(dataModel.OpenSimDocument.Model.BodySet.objects.Body)):
+                if 'femur_l' in dataModel.OpenSimDocument.Model.BodySet.objects.Body[0, i].Attributes.name:
+                    if hasattr(dataModel.OpenSimDocument.Model.BodySet.objects.Body[0, i], 'attached_geometry'):
+                        dataModel.OpenSimDocument.Model.BodySet.objects.Body[0, i].attached_geometry.Mesh.mesh_file = c
+                        print("yes 3")
+                    else:
+                        dataModel.OpenSimDocument.Model.BodySet.objects.Body[0, i].VisibleObject.GeometrySet.objects.DisplayGeometry.geometry_file.Text = c
+                        print("yes 4")
+                    break
+
+        for i in range(len(femurMuscle)):
+            if '{' in femurPlace1[i]:
+                ind = femurPlace1[i].find('{')
+                tmp_place = femurPlace1[i][:ind-1]
+                dataModel.OpenSimDocument.Model.ForceSet.objects.femurMuscleType[i][0, femurNR[i]] \
+                    .GeometryPath.PathPointSet.objects.tmp_place[0, int(femurPlace1[i][-2])].location.Text = femurMuscle_OpenSim[i, :]
+                print("yes 5")
+            else:
+                tmp_place = femurPlace1[i]
+                dataModel.OpenSimDocument.Model.ForceSet.objects.femurMuscleType[i][0, femurNR[i]] \
+                    .GeometryPath.PathPointSet.objects.tmp_place.location.Text = femurMuscle_OpenSim[i, :]
+                print("yes 6")
+
+        for i in range(len(markerFemur_start)):
+            musclenr = markerFemurNR[i]
+            markerset.OpenSimDocument.MarkerSet.objects.Marker[0, musclenr].location.Text = femurMarker_OpenSim[i, :]
+            print("yes 7")
+    else:
+        raise ValueError('Unknown Error in femur_ns regarding ForceSet-Muscles to identify model basis (gait or rajagopal?) check try-catch blocks')

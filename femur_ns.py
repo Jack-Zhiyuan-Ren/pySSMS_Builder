@@ -524,7 +524,7 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
     femur_rot3_all_deform = []  # the outer box has been restored and the distal part of the femoral shaft is gradually deformed to fit the condylar (which does not move)
     
     
-    print("step 3")
+    # print("step 3")
     for i in range(femur_rot2_all.shape[0]):
         if np.any(np.all(femur_rot2_all[i] == Condyl_NewAxis, axis=1)):  # the condylar do not move but the rest is translated to restore the femoral head
             femur_rot3_all.append(femur_rot2_all[i])
@@ -549,7 +549,7 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
             # print(femur_rot3_all_deform)
             femur_rot3_all_deform.append(femur_rot3_all[i])
             # print(femur_rot3_all[i])
-    print("step 3")
+    # print("step 3")
 
     # print("femur_rot3_all_deform")
     # for i in range(len(femur_rot3_all_deform)):
@@ -756,15 +756,17 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
     femurMA_Rotated = femurMA_back
     femurMarker_Rotated = femurMarker_back
 
-    print("femur_Rotated")
-    for i in range(len(femur_Rotated)):
-        print(femur_Rotated[i])
+    # print("femur_Rotated")
+    # for i in range(len(femur_Rotated)):
+    #     print(femur_Rotated[i])
 
-    fig = plt.figure(figsize=(5, 9.5), dpi=100)
+    fig = plt.figure(figsize=(16, 9), dpi=100)
     ax = fig.add_subplot(111, projection='3d')
-    ax.plot_trisurf(femur_Rotated[:, 0], femur_Rotated[:, 1], femur_Rotated[:, 2], triangles = poly4,
-                    edgecolor='black', linestyle=':', cmap='gray')
-    ax.plot_trisurf(femur_start[:, 0], femur_start[:, 1], femur_start[:, 2], triangles = poly4 ,edgecolor='black')
+
+    # still some diferences in certain regions. But small enough 11/1/23
+
+    ax.plot_trisurf(femur_Rotated[:, 0], femur_Rotated[:, 1], femur_Rotated[:, 2], triangles = poly4, color=(0,0,0,0), edgecolor='black',linestyle=':')
+    ax.plot_trisurf(femur_start[:, 0], femur_start[:, 1], femur_start[:, 2], triangles = poly4, alpha = 0.2, edgecolor='black')
 
 
 
@@ -787,56 +789,90 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
     femur_OpenSim = coordinatesOpenSim(femur_Rotated)
     femurMuscle_OpenSim = coordinatesOpenSim(femurMA_Rotated)
     femurMarker_OpenSim = coordinatesOpenSim(femurMarker_Rotated)
-    
+
+
+    ##export the files again as xml files
+    # convert the femur data back to string
+    femur_rotated = '\t\t\t' + '\n'.join([' '.join(f'{x:+8.6f}' for x in row) for row in femur_OpenSim.T]) + '\n'
+    femur_Repared = femur_rotated.replace('+', ' ')
+    # replace the generic data with the rotated bone
+    dataFemur["PolyData"]["Piece"]["Points"]["DataArray"] = femur_Repared
+
+    # convert the dict back to xml file
+    # print("dataFemur")
+    # print(isinstance(dataFemur,dict))
+    Femur_rotated = struct2xml(dataFemur)
+
+    # name and placement of the femoral bone file
+    direct = ""  # Set your desired directory
+
+    # export - write the model as an xml - remember to save as a vtp file
+    if answerLeg == rightbone:
+        modelName = answerNameModelFemur
+        boneName = 'femurR_rotated.vtp'
+        c = f'{modelName}_{boneName}'
+        placeNameFemur = f'{direct}{place}{c}'
+        # write the model as an xml file
+        with open(placeNameFemur, 'w') as FID_femurR:
+            FID_femurR.write(Femur_rotated)
+    else:
+        modelName = answerNameModelFemur
+        boneName = 'femurL_rotated.vtp'
+        c = f'{modelName}_{boneName}'
+        placeNameFemur = f'{direct}{place}{c}'
+        with open(placeNameFemur, 'w') as FID_femurL:
+            FID_femurL.write(Femur_rotated)
+
+
     
     ##change the name of the femur in the gait2392 or rajagopal model file
     
     # Try if input model == gait model (ThelenMuscles) or rajagopal (Millard - which would cause an error)
-    muscles = dataModel.OpenSimDocument.Model.ForceSet.objects.Thelen2003Muscle[0]  # Assuming it's a list
+    #muscles = dataModel.OpenSimDocument.Model.ForceSet.objects.Thelen2003Muscle[0]  # Assuming it's a list ##not used anywhere
 
-    if answerLeg == rightbone:
-        for i in range(len(dataModel["Model"]["BodySet"]["objects"]["Body"])):
-            if 'femur_r' in dataModel["Model"]["BodySet"]["objects"]["Body"][i].Attributes.name:
-                if hasattr(dataModel["Model"]["BodySet"]["objects"]["Body"][i], 'attached_geometry'):
-                    dataModel["Model"]["BodySet"]["objects"]["Body"][i].attached_geometry.Mesh.mesh_file = c
-                else:
-                    dataModel["Model"]["BodySet"]["objects"]["Body"][i].VisibleObject.GeometrySet.objects.DisplayGeometry.geometry_file.Text = c
-                break
-    else:
-        for i in range(len(dataModel["Model"]["BodySet"]["objects"]["Body"])):
-            if 'femur_l' in dataModel["Model"]["BodySet"]["objects"]["Body"][i].Attributes.name:
-                if hasattr(dataModel["Model"]["BodySet"]["objects"]["Body"][i], 'attached_geometry'):
-                    dataModel["Model"]["BodySet"]["objects"]["Body"][i].attached_geometry.Mesh.mesh_file = c
-                else:
-                    dataModel["Model"]["BodySet"]["objects"]["Body"][i].VisibleObject.GeometrySet.objects.DisplayGeometry.geometry_file.Text = c
-                break
+    # if answerLeg == rightbone:
+    #     for i in range(len(dataModel["Model"]["BodySet"]["objects"]["Body"])):
+    #         if 'femur_r' in dataModel["Model"]["BodySet"]["objects"]["Body"][i]:
+    #             if hasattr(dataModel["Model"]["BodySet"]["objects"]["Body"][i], 'attached_geometry'):
+    #                 dataModel["Model"]["BodySet"]["objects"]["Body"][i].attached_geometry.Mesh.mesh_file = c
+    #             else:
+    #                 dataModel["Model"]["BodySet"]["objects"]["Body"][i].VisibleObject.GeometrySet.objects.DisplayGeometry.geometry_file.Text = c
+    #             break
+    # else:
+    #     for i in range(len(dataModel["Model"]["BodySet"]["objects"]["Body"])):
+    #         if 'femur_l' in dataModel["Model"]["BodySet"]["objects"]["Body"][i].Attributes.name:
+    #             if hasattr(dataModel["Model"]["BodySet"]["objects"]["Body"][i], 'attached_geometry'):
+    #                 dataModel["Model"]["BodySet"]["objects"]["Body"][i].attached_geometry.Mesh.mesh_file = c
+    #             else:
+    #                 dataModel["Model"]["BodySet"]["objects"]["Body"][i].VisibleObject.GeometrySet.objects.DisplayGeometry.geometry_file.Text = c
+    #             break
                 
                 
-    for i in range(len(femurMuscle)):
-        if len(femurPlace1[i]) == 14:
-            musclenr_femur = femurNR[i]
-            string_femur = femurPlace1[i]
-            dataModel.OpenSimDocument.Model.ForceSet.objects.Thelen2003Muscle[0].GeometryPath.PathPointSet.objects[string_femur[0:9]][0][int(string_femur[13])].location.Text = femurMuscle_OpenSim[i]
-        elif len(femurPlace1[i]) == 9:
-            musclenr_femur = femurNR[i]
-            string_femur = femurPlace1[i]
-            dataModel.OpenSimDocument.Model.ForceSet.objects.Thelen2003Muscle[0].GeometryPath.PathPointSet.objects[string_femur].location.Text = femurMuscle_OpenSim[i]
-        elif len(femurPlace1[i]) == 20:
-            musclenr_femur = femurNR[i]
-            string_femur = femurPlace1[i]
-            dataModel.OpenSimDocument.Model.ForceSet.objects.Thelen2003Muscle[0].GeometryPath.PathPointSet.objects[string_femur].location.Text = femurMuscle_OpenSim[i]
-        else:
-            musclenr_femur = femurNR[i]
-            string_femur = femurPlace1[i]
-            dataModel.OpenSimDocument.Model.ForceSet.objects.Thelen2003Muscle[0].GeometryPath.PathPointSet.objects[string_femur[0:20]][0][int(string_femur[23])].location.Text = femurMuscle_OpenSim[i]
+    # for i in range(len(femurMuscle)):
+    #     if len(femurPlace1[i]) == 14:
+    #         musclenr_femur = femurNR[i]
+    #         string_femur = femurPlace1[i]
+    #         dataModel.OpenSimDocument.Model.ForceSet.objects.Thelen2003Muscle[0].GeometryPath.PathPointSet.objects[string_femur[0:9]][0][int(string_femur[13])].location.Text = femurMuscle_OpenSim[i]
+    #     elif len(femurPlace1[i]) == 9:
+    #         musclenr_femur = femurNR[i]
+    #         string_femur = femurPlace1[i]
+    #         dataModel.OpenSimDocument.Model.ForceSet.objects.Thelen2003Muscle[0].GeometryPath.PathPointSet.objects[string_femur].location.Text = femurMuscle_OpenSim[i]
+    #     elif len(femurPlace1[i]) == 20:
+    #         musclenr_femur = femurNR[i]
+    #         string_femur = femurPlace1[i]
+    #         dataModel.OpenSimDocument.Model.ForceSet.objects.Thelen2003Muscle[0].GeometryPath.PathPointSet.objects[string_femur].location.Text = femurMuscle_OpenSim[i]
+    #     else:
+    #         musclenr_femur = femurNR[i]
+    #         string_femur = femurPlace1[i]
+    #         dataModel.OpenSimDocument.Model.ForceSet.objects.Thelen2003Muscle[0].GeometryPath.PathPointSet.objects[string_femur[0:20]][0][int(string_femur[23])].location.Text = femurMuscle_OpenSim[i]
 
-    for i in range(len(markerFemur_start)):
-        musclenr = markerFemurNR[i]
-        markerset.OpenSimDocument.MarkerSet.objects.Marker[0][musclenr].location.Text = femurMarker_OpenSim[i]
+    # for i in range(len(markerFemur_start)):
+    #     musclenr = markerFemurNR[i]
+    #     markerset.OpenSimDocument.MarkerSet.objects.Marker[0][musclenr].location.Text = femurMarker_OpenSim[i]
 
 
     try:
-        muscles = dataModel.OpenSimDocument.Model.ForceSet.objects.Millard2012EquilibriumMuscle[0]
+        #muscles = dataModel.OpenSimDocument.Model.ForceSet.objects.Millard2012EquilibriumMuscle[0]
         if strcmp(answerLeg, rightbone) == 1:
             for i in range(len(dataModel["Model"]["BodySet"]["objects"]["Body"])):
                 if 'femur_r' in dataModel["Model"]["BodySet"]["objects"]["Body"][i].Attributes.name:
