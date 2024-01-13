@@ -765,7 +765,7 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
 
     # still some diferences in certain regions. But small enough 11/1/23
 
-    ax.plot_trisurf(femur_Rotated[:, 0], femur_Rotated[:, 1], femur_Rotated[:, 2], triangles = poly4, color=(0,0,0,0), edgecolor='black',linestyle=':')
+    ax.plot_trisurf(femur_Rotated[:, 0], femur_Rotated[:, 1], femur_Rotated[:, 2], triangles = poly4, color=(0,0,0,0), edgecolor='black',linestyle='dotted')                     #color=(0,0,0,0), edgecolor='black',linestyle=':')
     ax.plot_trisurf(femur_start[:, 0], femur_start[:, 1], femur_start[:, 2], triangles = poly4, alpha = 0.2, edgecolor='black')
 
 
@@ -906,8 +906,15 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
     ## change the name of the model
     type = 'deformed'
     modelNamePrint = '{}_{}'.format(modelName, type)
-    dataModel.OpenSimDocument.Model.Attributes.name = 'deformed_model'  # modelNamePrint
+
+    print("dataModel[Model]")
+    for i in dataModel:
+        print(dataModel[i])
     
+    dataModel.OpenSimDocument.Model.Attributes.name = 'deformed_model'  # modelNamePrint
+
+    
+
     
     ## Export the whole gait2392 model file - rotated muscle attachements and correct bone rotataion names
     Model2392_rotatedfemur = struct2xml(dataModel)

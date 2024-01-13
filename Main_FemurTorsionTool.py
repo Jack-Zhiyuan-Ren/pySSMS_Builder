@@ -46,7 +46,7 @@ markerset = 'MarkerSet.xml'
 deform_bone = 'F'
 which_leg = 'R'
 angle_AV_right = 15.7 #right anteversion angle (in degrees) 
-angle_NS_right = 180  # right neck-shaft angle (in degrees) 
+angle_NS_right = 126.5  # right neck-shaft angle (in degrees) 
 
 deformed_model = 'rightNSA'+  str(angle_NS_right) + '_rightAVA' + str(angle_AV_right)
 
