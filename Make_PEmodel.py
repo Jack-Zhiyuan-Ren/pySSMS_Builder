@@ -118,9 +118,20 @@ def make_PEmodel_FemurOnly(answerModel, deformed_model, answerMarkerSet, deform_
     #print(dataFemur)
     femur_ns(dataModel, markerset, answerLegFemur, 'R', FA_angle, NS_angle,
          answerNameModel, answerMarkerSet, dataFemur, place)
+    
+
+    # cwd = os.getcwd()
          
          
-    file_path = f"DEFORMED_MODEL/{answerNameModel}.osim"
+    file_path = f"C:/Users/jackr/OneDrive/Documents/GitHub/Ren_Femur_Twist_Python_copy/DEFORMED_MODEL/{answerNameModel}.osim"
+
+    cwd = os.getcwd()
+
+    # print(cwd)
+    # print('cwd')
+    # print('file_path')
+    # print(file_path)
+
 
     with open(file_path, 'r') as f:
         filetext = f.read()
@@ -163,8 +174,11 @@ def make_PEmodel_FemurOnly(answerModel, deformed_model, answerMarkerSet, deform_
                 section_new_order += full_text[j]
             newFileText = newFileText.replace(section[abs_start:abs_end], section_new_order)
             
-            
-    with open('DEFORMED_MODEL/' + answerNameModel + '.osim', 'w') as fid:
+    cwd = os.getcwd() 
+
+    print("cwd") 
+    print(cwd)      
+    with open('C:/Users/jackr/OneDrive/Documents/GitHub/Ren_Femur_Twist_Python_copy/DEFORMED_MODEL/' + answerNameModel + '.osim', 'w') as fid:
         fid.write(newFileText)
 
          

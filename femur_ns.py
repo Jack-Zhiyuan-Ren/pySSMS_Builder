@@ -907,11 +907,12 @@ def femur_ns(dataModel, markerset, answerLeg, rightbone, FA_angle, NS_angle, ans
     type = 'deformed'
     modelNamePrint = '{}_{}'.format(modelName, type)
 
-    print("dataModel[Model]")
-    for i in dataModel:
-        print(dataModel[i])
+    # print("dataModel[Model]")
+    # print(dataModel["Model"])
+    # for i in dataModel:
+    #     print(dataModel[i])
     
-    dataModel.OpenSimDocument.Model.Attributes.name = 'deformed_model'  # modelNamePrint
+    # dataModel.OpenSimDocument.Model.Attributes.name = 'deformed_model'  # modelNamePrint
 
     
 
