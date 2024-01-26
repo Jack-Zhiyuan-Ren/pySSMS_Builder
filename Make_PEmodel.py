@@ -176,8 +176,8 @@ def make_PEmodel_FemurOnly(answerModel, deformed_model, answerMarkerSet, deform_
             
     cwd = os.getcwd() 
 
-    print("cwd") 
-    print(cwd)      
+    # print("cwd") 
+    # print(cwd)      
     with open('C:/Users/jackr/OneDrive/Documents/GitHub/Ren_Femur_Twist_Python_copy/DEFORMED_MODEL/' + answerNameModel + '.osim', 'w') as fid:
         fid.write(newFileText)
 
